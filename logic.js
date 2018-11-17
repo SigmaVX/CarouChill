@@ -1,16 +1,11 @@
-// OPtions
-// Caldiascope - all same images
-// Shuffle Grid
-
-
 // Our Images
 const images=["./images/1.jpg", "./images/2.jpg", "./images/3.jpg", "./images/4.jpg", "./images/5.jpg", "./images/6.jpg", "./images/7.jpg", "./images/8.jpg", "./images/9.jpg","./images/10.jpg", "./images/11.jpg","./images/12.jpg", "./images/13.jpg","./images/14.jpg", "./images/15.jpg","./images/16.jpg", "./images/17.jpg","./images/18.jpg", "./images/19.jpg","./images/20.jpg", "./images/21.jpg","./images/22.jpg", "./images/23.jpg", "./images/24.jpg", "./images/25.jpg","./images/26.jpg", "./images/27.jpg","./images/28.jpg", "./images/29.jpg","./images/30.jpg"]
 
-// Randomize Images
+// Randomized Array Of Images
 let randomImages = images.sort(function(a, b){return 0.5 - Math.random()})
-// console.log(randomImages);
 
 // Ser Vars for DOM Elements
+const grid=document.getElementById("grid");
 const box1=document.getElementById("box-1");
 const box2=document.getElementById("box-2");
 const box3=document.getElementById("box-3");
@@ -18,14 +13,18 @@ const box4=document.getElementById("box-4");
 const box5=document.getElementById("box-5");
 const box6=document.getElementById("box-6");
 
+// Image Array (For Loops)
 const boxArray = [box1, box2, box3, box4, box5, box6];
 
-// To Track Our Index
+// Track Our Index
 let count = 0;
 
-// Store Our Interval So We Can Have Access To It
+// Store Our Interval (So We Can Have Access)
 let carousel;
 
+// Store Grid & Play State
+let shuffleState = "mixed";
+let playState = "paused";
 
 // ============================================================================================================
 // There is a DRY way to do this code with a loop but it does not achieve the stagered effect I was looking for
@@ -40,10 +39,12 @@ const loadStartImages = () =>{
     }
 }
 
+// Fade Out Current Images
 const fadeOut = (box) => {
     box.setAttribute("class", "box fadeOut");
 }
 
+// Change Image Source While Hidden
 const updateImages = (box) => {
     box.style.visibility = "hidden";
     box.style.backgroundImage = `url(${randomImages[count]})`;
@@ -53,21 +54,23 @@ const updateImages = (box) => {
 
 }
 
+// Add New Class For Annimation
 const updateClass = (box) => {
     box.setAttribute("class", "box scaleIn");
     box.style.visibility = "visible";
 }
 
+// Steps To Replace Images With Timers
 const fullCycle = (box) => {
     setTimeout(()=>fadeOut(box), 0);
     setTimeout(()=>updateImages(box), 3000);
     setTimeout(()=>updateClass(box), 4000);
 }
 
-
+// Update Images On A Staggered Basis
 function cycleImages() {
 
-    // Check If All Images Used & Reshuffle
+    // Check If All Images Are Used & Reshuffle
     if(count>=randomImages.length-1){
         randomImages = images.sort(function(a, b){return 0.5 - Math.random()})
         count=0;
@@ -97,35 +100,110 @@ const stop = () => {
     clearInterval(carousel);
 }
 
+// Convert Grid To Columns
+const makeColumns = () =>{
+    grid.style.gridTemplateColumns="repeat(6, 1fr)";
+    box1.style.gridColumn="1/2";
+    box1.style.gridRow="1/3";
+    box2.style.gridColumn="2/3";
+    box2.style.gridRow="1/3";
+    box3.style.gridColumn="3/4";
+    box3.style.gridRow="1/3";
+    box4.style.gridColumn="4/5";
+    box4.style.gridRow="1/3";
+    box5.style.gridColumn="5/6";
+    box5.style.gridRow="1/3";
+    box6.style.gridColumn="6/7";
+    box6.style.gridRow="1/3";
+    box6.style.display="block";
+}
 
-const suffle = ()=>{
-    console.log("clicked");
+// Convert Grid To Boxes
+const makeBoxes = () => {
+    grid.style.gridTemplateColumns="repeat(6, 1fr)";
+    box1.style.gridColumn="1/3";
+    box1.style.gridRow="1/2";
+    box2.style.gridColumn="3/5";
+    box2.style.gridRow="1/2";
+    box3.style.gridColumn="5/7";
+    box3.style.gridRow="1/2";
+    box4.style.gridColumn="1/3";
+    box4.style.gridRow="2/3";
+    box5.style.gridColumn="3/5";
+    box5.style.gridRow="2/3";
+    box6.style.gridColumn="5/7";
+    box6.style.gridRow="2/3";
+    box6.style.display="block";
+}
+
+// Convert Grid To Boxes
+const makeMixed = () => {
+    grid.style.gridTemplateColumns="repeat(5, 1fr)";
+    box1.style.gridColumn="1/2";
+    box1.style.gridRow="1/2";
+    box2.style.gridColumn="1/3";
+    box2.style.gridRow="1/3";
+    box3.style.gridColumn="3/4";
+    box3.style.gridRow="1/3";
+    box4.style.gridColumn="4/6";
+    box4.style.gridRow="1/3";
+    box5.style.gridColumn="5/6";
+    box5.style.gridRow="2/3";
+    box6.style.display="none";
 }
 
 
 
-document.getElementById("play").addEventListener("click", function(){
-    console.log("clicked");
-    cycleImages();
-    start();
-    document.getElementById("pause-modal").style.display="none";
-});
-
-document.getElementById("pause").addEventListener("click", function(){
+const shuffle = ()=>{
     console.log("clicked");
     stop();
-    document.getElementById("pause-modal").style.display="block";
 
-    // setTimeout(()=>fadeOut(box1), 500);
-    // setTimeout(()=>fadeOut(box2), 1000);
-    // setTimeout(()=>fadeOut(box3), 1500);
-    // setTimeout(()=>fadeOut(box4), 2000);
-    // setTimeout(()=>fadeOut(box5), 2500);
-    // setTimeout(()=>fadeOut(box6), 3000);
+    switch(shuffleState) {
+        case "mixed": 
+            makeColumns();
+            shuffleState="columns";
+            break;
+        case "columns":
+            makeBoxes();
+            shuffleState="boxes";
+            break;
+        case "boxes":
+            makeMixed();
+            shuffleState="mixed";
+            break;
+        default:
+            makeMixed();
+            shuffleState="mixed";
+    }
+
+    cycleImages();
+    start();
+}
+
+// Start Event Listener
+document.getElementById("play").addEventListener("click", function(){
+    console.log("clicked");
+    if(playState=="paused"){
+        cycleImages();
+        start();
+        document.getElementById("pause-modal").style.display="none";
+        playState="playing"
+    }
+
 });
 
+// Pause Event Listener
+document.getElementById("pause").addEventListener("click", function(){
+    console.log("clicked");
+    playState="paused";
+    stop();
+    document.getElementById("pause-modal").style.display="block";
+});
+
+// Shuffle Event Listener
 document.getElementById("shuffle").addEventListener("click", function(){
     console.log("clicked");
+    document.getElementById("pause-modal").style.display="none";
     shuffle();
 });
 
