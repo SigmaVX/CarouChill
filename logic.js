@@ -207,4 +207,5 @@ document.getElementById("shuffle").addEventListener("click", function(){
     shuffle();
 });
 
+// makeColumns();
 loadStartImages();
