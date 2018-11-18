@@ -1,3 +1,11 @@
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;    
+    }
+}
 
 @keyframes scaleIn {
     0% {
@@ -15,14 +23,19 @@
     }
   }
 
-@keyframes fadeOut {
+  @keyframes zoomIn {
     0% {
-        opacity: 1;
+        -ms-transform: scale(1, 1); /* IE 9 */
+        -webkit-transform: scale(1, 1); /* Safari */
+        transform: scale(1, 1);
     }
+
     100% {
-        opacity: 0;    
+        -ms-transform: scale(1.05, 1.05); /* IE 9 */
+        -webkit-transform: scale(1.05, 1.05); /* Safari */
+        transform: scale(1.05, 1.05);
     }
-}
+  }
 
 a {
     color: inherit;
@@ -43,9 +56,8 @@ body{
     height: 80vh;
     margin-left:auto;
     margin-right: auto;
-    background: slateblue;
+    background: #3B3B7B;
     z-index: -3;
-    /* background-image: url('./images/1.jpg'); */
 }
 
 .box{
@@ -57,8 +69,14 @@ body{
 
 .fadeOut{
     animation-name: fadeOut;
-    animation-duration: 4000ms;
-    animation-timing-function: ease-out; 
+    animation-duration: 3000ms;
+    animation-timing-function: ease-out;
+    animation-fill-mode: forwards; 
+}
+
+.icon {
+    padding-bottom: 5px;
+    font-size: 35px;
 }
 
 .icon-section{
@@ -78,10 +96,11 @@ body{
     color: slateblue;
 }
 
-.icon-wrap:hover, .icon-wrap:focus{
-    -ms-transform: scale(1.1, 1.1); /* IE 9 */
-    -webkit-transform: scale(1.1, 1.1); /* Safari */
-    transform: scale(1.1, 1.1);
+.icon-wrap:hover, .icon-wrap:target{
+    animation: zoomIn;
+    animation-duration: 500ms;
+    animation-timing-function: ease-in;
+    animation-fill-mode: forwards;
     color:white;
 
 }
@@ -90,6 +109,7 @@ body{
     animation-name: scaleIn;
     animation-duration: 3000ms;
     animation-timing-function: ease-in;
+    animation-fill-mode: forwards;
 }
 
 #box-1{
@@ -177,4 +197,59 @@ body{
       opacity: 0;
     }
   }
+
+  /* Media Queries */
+/* ============= */
+ 
+/* Very Small Screens - Smaller than 576px */
+@media (max-width: 575.98px) { 
+
+    .grid-wrapper{
+        height: 60vh;
+    }
+
+    .icon-section{
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        height: 40vh;
+    }
+    
+    .icon-wrap{
+        font-size: 25px;
+    }
+    
+    #pause-modal{
+        position: absolute;
+        display: none;
+        top: 10%;
+        left: 7%;
+        width: 80%;
+        height: 40%;
+        padding: 20px 10px 10px 10px;
+        font-size: 20px;    
+    }
+}
+
+
+/* Small Devices - (landscape Phones - 576px and Up) */
+@media (min-width: 576px) and (max-width: 767.98px) {
+
+
+}
+
+/* Medium devices (Tablets - 768px and Up) */
+@media (min-width: 768px) and (max-width: 991.98px) { 
+
+    
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) and (max-width: 1199.98px) { 
+  
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) { 
+
+}
   

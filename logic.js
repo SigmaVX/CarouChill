@@ -1,10 +1,14 @@
-// Our Images
+// Background Color Options
+const colors = ["#413075","#2E4172","#582A72","#AA9739","#2E4172","#A64050","#A7AE43","#3B3B7B","#ff99ff", "#008060", "#ff944d","#cc5200", "#ff9900", "#8080ff", "#996633", "#800000","#0099cc"];
+
+
+// Our Images - Nature
 const images=["./images/1.jpg", "./images/2.jpg", "./images/3.jpg", "./images/4.jpg", "./images/5.jpg", "./images/6.jpg", "./images/7.jpg", "./images/8.jpg", "./images/9.jpg","./images/10.jpg", "./images/11.jpg","./images/12.jpg", "./images/13.jpg","./images/14.jpg", "./images/15.jpg","./images/16.jpg", "./images/17.jpg","./images/18.jpg", "./images/19.jpg","./images/20.jpg", "./images/21.jpg","./images/22.jpg", "./images/23.jpg", "./images/24.jpg", "./images/25.jpg","./images/26.jpg", "./images/27.jpg","./images/28.jpg", "./images/29.jpg","./images/30.jpg"]
 
 // Randomized Array Of Images
 let randomImages = images.sort(function(a, b){return 0.5 - Math.random()})
 
-// Ser Vars for DOM Elements
+// Ser Variables for DOM Elements
 const grid=document.getElementById("grid");
 const box1=document.getElementById("box-1");
 const box2=document.getElementById("box-2");
@@ -16,7 +20,7 @@ const box6=document.getElementById("box-6");
 // Image Array (For Loops)
 const boxArray = [box1, box2, box3, box4, box5, box6];
 
-// Track Our Index
+// Track Our Index For Images
 let count = 0;
 
 // Store Our Interval (So We Can Have Access)
@@ -34,7 +38,7 @@ let playState = "paused";
 const loadStartImages = () =>{
     for(i=0; i<boxArray.length; i++){
         boxArray[i].style.backgroundImage = `url(${randomImages[count + i]})`;
-        console.log(count);
+        // console.log(count);
         count++
     }
 }
@@ -48,19 +52,26 @@ const fadeOut = (box) => {
 const updateImages = (box) => {
     box.style.visibility = "hidden";
     box.style.backgroundImage = `url(${randomImages[count]})`;
-    console.log(`Image Number: ${count}`);
+    // console.log(`Image Number: ${count}`);
     count++;
-    console.log(`Updated Count: ${count}`);
+    // console.log(`Updated Count: ${count}`);
 
 }
 
-// Add New Class For Annimation
+// Add Class For Animation
 const updateClass = (box) => {
     box.setAttribute("class", "box scaleIn");
     box.style.visibility = "visible";
 }
 
-// Steps To Replace Images With Timers
+// Change Background Color
+const changeBackground = () => {
+    let colorPick = Math.floor(Math.random() * colors.length);
+    // console.log(`Color Picked: ${colors[colorPick]}`);
+    grid.style.background = colors[colorPick];
+}
+
+// Set Timers To Replace Images
 const fullCycle = (box) => {
     setTimeout(()=>fadeOut(box), 0);
     setTimeout(()=>updateImages(box), 3000);
@@ -80,6 +91,7 @@ function cycleImages() {
         setTimeout(()=>fullCycle(box4), 2000);
         setTimeout(()=>fullCycle(box5), 2500);
         setTimeout(()=>fullCycle(box6), 3000);
+        changeBackground();
     } else {
         setTimeout(()=>fullCycle(box1), 500);
         setTimeout(()=>fullCycle(box2), 1000);
@@ -87,6 +99,7 @@ function cycleImages() {
         setTimeout(()=>fullCycle(box4), 2000);
         setTimeout(()=>fullCycle(box5), 2500);
         setTimeout(()=>fullCycle(box6), 3000);
+        changeBackground();
     }
 }
 
@@ -152,10 +165,9 @@ const makeMixed = () => {
     box6.style.display="none";
 }
 
-
-
+// Shuffle Grid Based On Current State
 const shuffle = ()=>{
-    console.log("clicked");
+    // console.log("clicked");
     stop();
 
     switch(shuffleState) {
@@ -182,7 +194,7 @@ const shuffle = ()=>{
 
 // Start Event Listener
 document.getElementById("play").addEventListener("click", function(){
-    console.log("clicked");
+    // console.log("clicked");
     if(playState=="paused"){
         cycleImages();
         start();
@@ -194,7 +206,7 @@ document.getElementById("play").addEventListener("click", function(){
 
 // Pause Event Listener
 document.getElementById("pause").addEventListener("click", function(){
-    console.log("clicked");
+    // console.log("clicked");
     playState="paused";
     stop();
     document.getElementById("pause-modal").style.display="block";
@@ -202,10 +214,10 @@ document.getElementById("pause").addEventListener("click", function(){
 
 // Shuffle Event Listener
 document.getElementById("shuffle").addEventListener("click", function(){
-    console.log("clicked");
+    // console.log("clicked");
     document.getElementById("pause-modal").style.display="none";
     shuffle();
 });
 
-// makeColumns();
+// Load Images On Page Load
 loadStartImages();
